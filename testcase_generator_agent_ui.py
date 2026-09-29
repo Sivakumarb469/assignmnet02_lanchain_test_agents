@@ -1,11 +1,24 @@
 import streamlit as st
+import os
 from langchain.agents import create_agent
 from dotenv import load_dotenv
+
+# Load local .env file if it exists
+load_dotenv()
+
+# Bridge Streamlit Cloud Secrets to os.environ if running in the cloud
+if "GOOGLE_API_KEY" in st.secrets:
+    os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
+
+# Ensure API key is present before running
+if not os.environ.get("GOOGLE_API_KEY"):
+    st.error("GOOGLE_API_KEY is missing! Please set it in Streamlit Secrets.")
+    st.stop()
+
 #i did insatll teh below pacjkages and set the google api key in the .env file
 #pip install langchain langchain-google-genai python-dotenv
 #model="google_genai:gemini-flash-lite-latest" (or "google_genai:gemini-2.5-flash-lite")
 
-load_dotenv()
 
 # Custom CSS to increase font size for labels and input boxes
 st.markdown("""
